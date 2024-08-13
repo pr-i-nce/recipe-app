@@ -15,6 +15,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.urandom(24)
     app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False  # Token will not expire
     
     # Ensure the instance path exists
     try:
@@ -48,3 +49,4 @@ def create_app():
     app.register_blueprint(support)
 
     return app
+

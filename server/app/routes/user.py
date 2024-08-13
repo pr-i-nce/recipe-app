@@ -28,7 +28,7 @@ def get_profile():
         'profile_photo': user.profile_photo
     })
 
-# Update user profile, including profile photo
+# Update user profile, including profile photo and password
 @user.route('/user/profile', methods=['PUT'])
 @jwt_required()
 def update_profile():
@@ -60,8 +60,13 @@ def update_profile():
         photo.save(filepath)
         user.profile_photo = photo_filename
 
+    # Handle password update
+    if 'password' in data and data['password']:
+        user.set_password(data['password'])
+
     db.session.commit()
     return jsonify({"message": "Profile updated successfully"}), 200
+
 # Add a recipe to favorites
 @user.route('/user/favorites', methods=['POST'])
 @jwt_required()
@@ -332,3 +337,4 @@ def delete_recipe(recipe_id):
     db.session.delete(recipe)
     db.session.commit()
     return jsonify({"message": "Recipe deleted successfully"}), 200
+

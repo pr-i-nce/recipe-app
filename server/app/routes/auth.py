@@ -52,4 +52,3 @@ def login():
         return jsonify(access_token=access_token, is_admin=is_admin), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
-

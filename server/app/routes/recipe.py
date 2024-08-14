@@ -46,24 +46,31 @@ def get_recipe(recipe_id):
 def add_recipe():
     current_user_id = get_jwt_identity()
 
-    if 'main_photo' not in request.files:
-        return jsonify({"message": "Main photo is required"}), 400
-    
-    main_photo = request.files['main_photo']
+    main_photo = None
 
-    if main_photo and allowed_file(main_photo.filename):
-        filename = secure_filename(main_photo.filename)
-        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-        main_photo.save(filepath)
+    # Check if 'main_photo' is in the form as a file or a URL
+    if 'main_photo' in request.form:
+        # If it's a URL
+        main_photo = request.form['main_photo']
+    elif 'main_photo' in request.files:
+        # If it's a file
+        file = request.files['main_photo']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            main_photo = filename
+        else:
+            return jsonify({"message": "Invalid file type for main photo"}), 400
     else:
-        return jsonify({"message": "Invalid file type for main photo"}), 400
+        return jsonify({"message": "Main photo is required"}), 400
 
     new_recipe = Recipe(
         name=request.form['name'],
         description=request.form['description'],
         ingredients=request.form['ingredients'],
         instructions=request.form['instructions'],
-        main_photo=filename,
+        main_photo=main_photo,
         user_id=current_user_id
     )
     db.session.add(new_recipe)
@@ -80,16 +87,22 @@ def update_recipe(recipe_id):
     if not recipe:
         return jsonify({"message": "Recipe not found or not authorized"}), 404
 
-    if 'main_photo' in request.files:
-        main_photo = request.files['main_photo']
-        if main_photo and allowed_file(main_photo.filename):
-            filename = secure_filename(main_photo.filename)
+    # Update main_photo if provided as URL or file
+    if 'main_photo' in request.form:
+        # If it's a URL
+        recipe.main_photo = request.form['main_photo']
+    elif 'main_photo' in request.files:
+        # If it's a file
+        file = request.files['main_photo']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
             filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            main_photo.save(filepath)
+            file.save(filepath)
             recipe.main_photo = filename
         else:
             return jsonify({"message": "Invalid file type for main photo"}), 400
 
+    # Update other fields
     recipe.name = request.form.get('name', recipe.name)
     recipe.description = request.form.get('description', recipe.description)
     recipe.ingredients = request.form.get('ingredients', recipe.ingredients)

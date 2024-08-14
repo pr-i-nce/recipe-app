@@ -42,7 +42,7 @@ def register():
 @auth.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('username')
+    userecipe-apprname = data.get('username')
     password = data.get('password')
 
     user = User.query.filter_by(username=username).first()

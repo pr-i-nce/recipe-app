@@ -44,15 +44,18 @@ def update_profile():
     # Handle profile photo
     photo = request.files.get('photo')
     if photo:
+        # Secure the filename and make it unique
         filename = secure_filename(photo.filename)
         timestamp = int(time.time())
         photo_filename = f"{user.username}_{timestamp}_{filename}"
         
+        # Remove old photo if exists
         if user.profile_photo:
             old_photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], user.profile_photo)
             if os.path.exists(old_photo_path):
                 os.remove(old_photo_path)
         
+        # Save new photo
         filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], photo_filename)
         photo.save(filepath)
         user.profile_photo = photo_filename
@@ -176,6 +179,7 @@ def get_recommendations():
         'reason': rec.reason
     } for rec, recipe in zip(recommendations, recommended_recipes)])
 
+
 # Helper function to check if the user is an admin
 def is_admin(user_id):
     return User.query.filter_by(id=user_id, is_admin=True).first() is not None
@@ -201,11 +205,12 @@ def add_review(recipe_id):
 @user.route('/recipes/<int:recipe_id>/reviews', methods=['GET'])
 @jwt_required()
 def get_reviews(recipe_id):
+    user_id = get_jwt_identity()
     reviews = Review.query.filter_by(recipe_id=recipe_id).all()
     
     return jsonify([{
         'id': review.id,
-        'author': User.query.get(review.user_id).username,
+        'author': User.query.get(review.user_id).username,  # Assuming you want to show the author's username
         'rating': review.rating,
         'comment': review.comment
     } for review in reviews])
@@ -242,28 +247,94 @@ def admin_delete_review(recipe_id, review_id):
     return jsonify({"message": "Review deleted successfully"}), 200
 
 
-# Upload a new recipe (for normal users)
-@user.route('/user/recipes', methods=['POST'])
+# Admin routes
+
+# Get all support tickets
+@user.route('/admin/support_tickets', methods=['GET'])
 @jwt_required()
-def upload_recipe():
+def get_support_tickets():
     user_id = get_jwt_identity()
-    data = request.form
-    name = data.get('name')
-    description = data.get('description')
-    photo_url = data.get('main_photo_url')  # Expecting URL for main_photo
+    if user_id != 1: 
+        return jsonify({"message": "Access forbidden"}), 403
 
-    if not photo_url:
-        return jsonify({"message": "Main photo URL is required."}), 400
+    tickets = SupportTicket.query.all()
+    return jsonify([{
+        'id': ticket.id,
+        'subject': ticket.subject,
+        'message': ticket.message,
+        'status': ticket.status,
+        'user_id': ticket.user_id,
+        'created_at': ticket.created_at
+    } for ticket in tickets])
 
-    # Save the recipe to the database
-    new_recipe = Recipe(
-        name=name,
-        description=description,
-        user_id=user_id,
-        main_photo=photo_url  # Store the URL directly
-    )
-    db.session.add(new_recipe)
+# Set status of a support ticket
+@user.route('/admin/support_tickets/<int:ticket_id>', methods=['PATCH'])
+@jwt_required()
+def update_ticket_status(ticket_id):
+    user_id = get_jwt_identity()
+    if user_id != 1: 
+        return jsonify({"message": "Access forbidden"}), 403
+
+    data = request.get_json()
+    ticket = SupportTicket.query.get(ticket_id)
+    if not ticket:
+        return jsonify({"message": "Ticket not found"}), 404
+
+    # Default to 'pending' if no status provided
+    status = data.get('status', 'pending')
+    if status not in ['pending', 'completed']:
+        return jsonify({"message": "Invalid status"}), 400
+
+    ticket.status = status
     db.session.commit()
+    return jsonify({"message": "Ticket status updated successfully"}), 200
 
-    return jsonify({"message": "Recipe uploaded successfully", "recipe_id": new_recipe.id}), 201
+# Get all users
+@user.route('/admin/users', methods=['GET'])
+@jwt_required()
+def get_users():
+    user_id = get_jwt_identity()
+    if user_id != 1: 
+        return jsonify({"message": "Access forbidden"}), 403
+
+    users = User.query.all()
+    return jsonify({
+        'total_users': len(users),
+        'users': [{
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        } for user in users]
+    })
+
+# Get all recipes
+@user.route('/admin/recipes', methods=['GET'])
+@jwt_required()
+def get_recipes():
+    user_id = get_jwt_identity()
+    if user_id != 1: 
+        return jsonify({"message": "Access forbidden"}), 403
+
+    recipes = Recipe.query.all()
+    return jsonify([{
+        'id': recipe.id,
+        'name': recipe.name,
+        'description': recipe.description
+    } for recipe in recipes])
+
+# Delete a recipe
+@user.route('/admin/recipes/<int:recipe_id>', methods=['DELETE'])
+@jwt_required()
+def delete_recipe(recipe_id):
+    user_id = get_jwt_identity()
+    if user_id != 1: 
+        return jsonify({"message": "Access forbidden"}), 403
+
+    recipe = Recipe.query.get(recipe_id)
+    if not recipe:
+        return jsonify({"message": "Recipe not found"}), 404
+
+    db.session.delete(recipe)
+    db.session.commit()
+    return jsonify({"message": "Recipe deleted successfully"}), 200
 

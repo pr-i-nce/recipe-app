@@ -23,19 +23,21 @@ def register():
     new_user = User(username=username, email=email)
     new_user.set_password(password)
 
+    # Handle photo upload
     photo = request.files.get('photo')
     if photo and photo.filename != '':
-        # Ensure the upload directory exists
+        # Ensure the upload folder exists
         if not os.path.exists(current_app.config['UPLOAD_FOLDER']):
             os.makedirs(current_app.config['UPLOAD_FOLDER'])
-        
+
         photo_filename = f"{username}_{photo.filename}"
         photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], photo_filename)
         photo.save(photo_path)
 
-        # Store the relative URL path to the uploaded photo
+        # Save the path for later retrieval
         new_user.profile_photo = url_for('static', filename=f'uploads/{photo_filename}', _external=False)
 
+    # Add the new user to the database
     db.session.add(new_user)
     db.session.commit()
 
@@ -44,12 +46,15 @@ def register():
 @auth.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('username')
+    username = data.get('username')  # Corrected typo
     password = data.get('password')
 
     user = User.query.filter_by(username=username).first()
+
     if user and user.check_password(password):
         access_token = create_access_token(identity=user.id)
-        return jsonify(access_token=access_token), 200
+        is_admin = user.id == 1  # Check if the user is admin
+        return jsonify(access_token=access_token, is_admin=is_admin), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
+

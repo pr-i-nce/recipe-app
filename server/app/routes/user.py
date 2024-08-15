@@ -250,26 +250,17 @@ def upload_recipe():
     data = request.form
     name = data.get('name')
     description = data.get('description')
+    photo_url = data.get('main_photo_url')  # Expecting URL for main_photo
 
-    # Handle recipe photo
-    photo = request.files.get('photo')
-    if photo:
-        filename = secure_filename(photo.filename)
-        timestamp = int(time.time())
-        photo_filename = f"{name}_{timestamp}_{filename}"
-
-        # Save the photo
-        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], photo_filename)
-        photo.save(filepath)
-    else:
-        photo_filename = None
+    if not photo_url:
+        return jsonify({"message": "Main photo URL is required."}), 400
 
     # Save the recipe to the database
     new_recipe = Recipe(
         name=name,
         description=description,
         user_id=user_id,
-        main_photo=photo_filename
+        main_photo=photo_url  # Store the URL directly
     )
     db.session.add(new_recipe)
     db.session.commit()

@@ -40,44 +40,44 @@ def get_recipe(recipe_id):
         'main_photo': recipe.main_photo
     })
 
-# Add a new recipe
 @recipe.route('/recipes', methods=['POST'])
 @jwt_required()
 def add_recipe():
     current_user_id = get_jwt_identity()
+    
+    # Check if the user provided a file or a URL for the main photo
+    if 'main_photo' in request.files:
+        main_photo = request.files['main_photo']
 
-    main_photo = None
-
-    # Check if 'main_photo' is in the form as a file or a URL
-    if 'main_photo' in request.form:
-        # If it's a URL
-        main_photo = request.form['main_photo']
-    elif 'main_photo' in request.files:
-        # If it's a file
-        file = request.files['main_photo']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+        if main_photo and allowed_file(main_photo.filename):
+            filename = secure_filename(main_photo.filename)
             filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            main_photo = filename
+            main_photo.save(filepath)
+            photo_path = filename
         else:
             return jsonify({"message": "Invalid file type for main photo"}), 400
+    elif 'main_photo_url' in request.form:
+        # If a URL is provided instead of a file
+        main_photo_url = request.form['main_photo_url']
+        photo_path = main_photo_url
     else:
         return jsonify({"message": "Main photo is required"}), 400
 
+    # Create the new recipe
     new_recipe = Recipe(
         name=request.form['name'],
         description=request.form['description'],
         ingredients=request.form['ingredients'],
         instructions=request.form['instructions'],
-        main_photo=main_photo,
+        main_photo=photo_path,
         user_id=current_user_id
     )
+    
     db.session.add(new_recipe)
     db.session.commit()
     return jsonify({"message": "Recipe added successfully"}), 201
 
-# Update an existing recipe
+
 @recipe.route('/recipes/<int:recipe_id>', methods=['PUT'])
 @jwt_required()
 def update_recipe(recipe_id):
@@ -87,22 +87,20 @@ def update_recipe(recipe_id):
     if not recipe:
         return jsonify({"message": "Recipe not found or not authorized"}), 404
 
-    # Update main_photo if provided as URL or file
-    if 'main_photo' in request.form:
-        # If it's a URL
-        recipe.main_photo = request.form['main_photo']
-    elif 'main_photo' in request.files:
-        # If it's a file
-        file = request.files['main_photo']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+    # Check for file upload or URL update
+    if 'main_photo' in request.files:
+        main_photo = request.files['main_photo']
+        if main_photo and allowed_file(main_photo.filename):
+            filename = secure_filename(main_photo.filename)
             filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+            main_photo.save(filepath)
             recipe.main_photo = filename
         else:
             return jsonify({"message": "Invalid file type for main photo"}), 400
+    elif 'main_photo_url' in request.form:
+        recipe.main_photo = request.form['main_photo_url']
 
-    # Update other fields
+    # Update other fields if provided
     recipe.name = request.form.get('name', recipe.name)
     recipe.description = request.form.get('description', recipe.description)
     recipe.ingredients = request.form.get('ingredients', recipe.ingredients)
@@ -254,3 +252,4 @@ def search_recipes():
         'ingredients': recipe.ingredients,
         'instructions': recipe.instructions
     } for recipe in results])
+

@@ -308,18 +308,20 @@ def get_users():
     })
 
 # Get all recipes
-@user.route('/recipes/<int:recipe_id>', methods=['GET'])
-def get_recipe(recipe_id):
-    recipe = Recipe.query.get_or_404(recipe_id)
-    return jsonify({
+@user.route('/admin/recipes', methods=['GET'])
+@jwt_required()
+def get_recipes():
+    user_id = get_jwt_identity()
+    if user_id != 1: 
+        return jsonify({"message": "Access forbidden"}), 403
+
+    recipes = Recipe.query.all()
+    return jsonify([{
         'id': recipe.id,
         'name': recipe.name,
         'description': recipe.description,
-        'ingredients': recipe.ingredients,
-        'instructions': recipe.instructions,
-        'main_photo': recipe.main_photo, 
-    })
-
+        'main_photo': recipe.main_photo 
+    } for recipe in recipes])
 
 # Delete a recipe
 @user.route('/admin/recipes/<int:recipe_id>', methods=['DELETE'])

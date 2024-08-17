@@ -1,0 +1,32 @@
+.admin-recipe-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 10px;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+.admin-recipe-card img {
+    width: 100%;
+    max-width: 300px; /* You can adjust the max-width */
+    height: auto;
+    height: 200px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.admin-recipe-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+.admin-recipe-card p {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    color: #555;
+}
+.admin-card-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.admin-card-buttons button {
+    padding: 10px 20px;

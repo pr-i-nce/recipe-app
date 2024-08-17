@@ -1,0 +1,55 @@
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay with transparency */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    background: #ffffff; /* White background for the modal */
+    padding: 30px 20px; /* Ample padding for breathing space */
+    border-radius: 12px; /* Smoothly rounded corners */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow for a more pronounced effect */
+    width: 500px; /* Fixed width for the card */
+    max-width: 90%; /* Responsive width for smaller screens */
+    max-height: 90vh; /* Restrict height to prevent overflow */
+    overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
+    position: relative; /* Position for the close button */
+    transition: transform 0.3s ease-in-out; /* Smooth open/close transition */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Ensure content is centered inside */
+}
+
+/* Input Styles (one per row) */
+.modal-content input {
+    width: 80%; /* Full width input */
+    padding: 12px; /* Comfortable padding */
+    margin-bottom: 15px; /* Space between inputs */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 6px; /* Rounded corners for inputs */
+    font-size: 16px; /* Adjust input font size */
+    transition: border-color 0.3s ease; /* Smooth transition for focus effect */
+    display: block; /* Make sure inputs are block-level, taking up full row */
+}
+
+/* Input Focus Effect */
+.modal-content input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 500px) {
+    .modal-content {
+        width: 90%; /* Full width for smaller screens */
+    }
+}

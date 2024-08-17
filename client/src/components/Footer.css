@@ -1,0 +1,26 @@
+/* Footer Styles */
+
+.footer {
+    position: relative; /* Changed from fixed to relative */
+    width: 100%;
+    background-color: #F9FBE7; /* Lighter Green for a soft and fresh footer background */
+    text-align: center;
+    padding: 5px 0;  /* Reduced padding for a smaller height */
+    box-shadow: 0 -1px 5px rgba(56, 142, 60, 0.3); /* Brighter green-tinted shadow for a subtle, fresh effect */
+    font-size: 14px; /* Comfortable font size for readability */
+    line-height: 1.4; /* Slightly reduced line height for compact text */
+    color: #388E3C; /* Darker Green text color for contrast */
+    transition: transform 0.3s ease; /* Smooth transition for show/hide effect */
+    margin-top: 20px; /* Adds space above the footer to separate it from content */
+}
+
+.footer a {
+    color: #388E3C; /* Matching Green for link text */
+    text-decoration: none; /* Remove underline from links */
+    font-weight: bold; /* Bold links for emphasis */
+}
+
+.footer a:hover {
+    text-decoration: underline; /* Underline effect on hover for better visibility */
+    color: #2E7D32; /* Darker Green accent color on hover */
+}

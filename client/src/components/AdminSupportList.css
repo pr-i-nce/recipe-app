@@ -1,0 +1,31 @@
+.admin-support-list {
+    padding: 20px;
+}
+
+.error-message {
+    color: red;
+}
+
+.admin-support-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.admin-card-buttons {
+    margin-top: 10px;
+}
+
+.admin-card-buttons button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.admin-card-buttons button:hover {
+    background-color: #eee;
+}

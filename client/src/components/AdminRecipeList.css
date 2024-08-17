@@ -1,0 +1,74 @@
+.admin-recipe-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    grid-gap: 20px; /* Spacing between cards */
+    padding: 20px;
+}
+
+.admin-recipe-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.admin-recipe-card img {
+    width: 100%;
+    height: 200px; /* Fixed height to avoid stretching */
+    object-fit: cover; /* Keep image aspect ratio */
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.admin-recipe-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.admin-recipe-card p {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #666;
+}
+
+.admin-recipe-card button {
+    background-color: #ff4d4f;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-recipe-card button:hover {
+    background-color: #ff7875;
+}
+
+/* Responsive grid */
+@media (max-width: 1200px) {
+    .admin-recipe-list {
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-recipe-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-recipe-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 20px;
+}

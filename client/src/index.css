@@ -1,0 +1,43 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('../public/back.jpg'); /* Set background image */
+  background-size: cover; /* Ensure the image covers the entire background */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent image repetition */
+}
+
+nav {
+  background-color: #4CAF50; /* Fresh and Natural - Navbar Background */
+  padding: 10px;
+  color: #FFFFFF; /* Text color for contrast */
+  display: flex;
+  justify-content: space-around; /* Space items evenly */
+  align-items: center; /* Center items vertically */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+nav .logo {
+  font-size: 24px; /* Larger font size for the logo */
+  font-weight: bold; /* Make the logo bold */
+  color: #FFFFFF; /* Logo text color */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Subtle shadow for legibility */
+}
+
+nav .nav-links {
+  display: flex; /* Use flexbox for navigation links */
+}
+
+nav .nav-links a, nav .nav-links .nav-item {
+  color: #FFFFFF; /* Link text in white for clarity */
+  text-decoration: none; /* Remove underline from links */
+  padding: 5px 10px; /* Padding for clickable areas */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+  cursor: pointer; /* Show pointer cursor for clickable items */
+}
+
+nav .nav-links a:hover, nav .nav-links .nav-item:hover {
+  background-color: #D7CCC8; /* Navbar Accent - Soft background on hover */
+  color: #4CAF50; /* Change link text color to match the navbar background on hover */
+}

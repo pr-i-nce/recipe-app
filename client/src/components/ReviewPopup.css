@@ -1,0 +1,131 @@
+/* Backdrop to cover the entire screen */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure the modal is above other content */
+}
+
+/* Modal styling */
+.review-popup {
+    background-color: white;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+/* Close button styling */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: gold;
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    text-align: center;
+}
+
+.close-button:hover {
+    background-color: darkgoldenrod;
+    color: #000;
+}
+
+/* Error and success message styling */
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+    margin-top: 10px;
+}
+
+/* Form group styling for alignment */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group select, 
+.form-group textarea {
+    width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+textarea {
+    height: 100px; /* Adjust the height as needed */
+}
+
+/* Submit button styling */
+.submit-button {
+    background-color: gold;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    background-color: darkgoldenrod;
+    color: white;
+}
+
+/* Existing reviews styling */
+.existing-reviews {
+    margin-top: 20px;
+}
+
+.existing-reviews h4 {
+    margin-bottom: 10px;
+    color: #800000; /* Dark red color */
+    font-weight: bold;
+}
+
+.existing-reviews p {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 1rem;
+}
+
+.existing-reviews .review-author {
+    font-weight: bold;
+    color: #333;
+}
+
+.existing-reviews .review-text {
+    margin-left: 5px;
+    color: #555;
+    font-style: italic;
+}
+
+.existing-reviews .review-rating {
+    font-weight: bold;
+    color: #800000; /* Dark red color */
+}

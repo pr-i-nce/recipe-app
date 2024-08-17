@@ -1,0 +1,64 @@
+/* SupportPopup.css */
+
+.support-popup {
+  background-color: #f7fcf9; /* Softer light green background */
+  border: 1px solid #66bb6a; /* Subtle green border */
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 450px;
+  margin: 60px auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* More modern font */
+}
+
+.support-popup h2 {
+  text-align: center;
+  color: #2e7d32; /* Slightly darker green for the title */
+  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.support-popup .form-group {
+  margin-bottom: 20px;
+}
+
+.support-popup input[type="text"],
+.support-popup textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #a5d6a7; /* Lighter green border for input fields */
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #ffffff; /* White background for inputs */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2e7d32; /* Darker text color for better readability */
+}
+
+.support-popup textarea {
+  resize: vertical; /* Allow vertical resizing */
+  height: 120px;
+}
+
+.support-popup button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #66bb6a; /* Consistent green color for the button */
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Add transform transition */
+}
+
+.support-popup button[type="submit"]:hover {
+  background-color: #388e3c; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.support-popup button[type="submit"]:active {
+  background-color: #2e7d32; /* Even darker green on active */
+  transform: translateY(0); /* Remove lift effect on click */
+}

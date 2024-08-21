@@ -31,7 +31,8 @@ def create_app():
     jwt.init_app(app)
 
     # Enable CORS for a specific frontend domain
-    CORS(app, resources={r"https://recipehaven.netlify.app/"})
+    CORS(app, resources={r"/*": {"origins": "https://recipehaven.netlify.app"}})
+
 
     # Create database tables if they don't exist
     with app.app_context():
